@@ -41,16 +41,35 @@ m_answer = on_command(
 )
 
 _copy: dict[str, dict] = {}
+_copy_type: dict[str, set] = {}
 for file in pathlib.Path("./data/copywrite").glob("**/*.yaml"):
     with open(file, "r", encoding="utf-8") as f:
         _data = yaml.safe_load(f)
         if isinstance(_data, dict):
+            if "__category__" in _data:
+                category = _data["__category__"]
+                del _data["__category__"]
+            else:
+                category = "Default"
             _copy.update(_data)
+            if category not in _copy_type:
+                _copy_type[category] = set()
+            for key in _data:
+                _copy_type[category].add(key)
 for file in pathlib.Path(__file__).parent.glob("copywrite/*.yaml"):
     with open(file, "r", encoding="utf-8") as f:
         _data = yaml.safe_load(f)
         if isinstance(_data, dict):
+            if "__category__" in _data:
+                category = _data["__category__"]
+                del _data["__category__"]
+            else:
+                category = "Default"
             _copy.update(_data)
+            if category not in _copy_type:
+                _copy_type[category] = set()
+            for key in _data:
+                _copy_type[category].add(key)
 
 
 @m_copywrite.handle()
@@ -63,7 +82,9 @@ async def _(event: MessageEvent, args=CommandArg()):
     if not args:
         ret = "请输入要仿写的文案名字"
         if True:
-            ret = "目前的可用文案有：\n" + ", ".join(_copy.keys())
+            ret = ""
+            for category, keys in _copy_type.items():
+                ret += f"{category}:\n  " + ", ".join(sorted(keys)) + "\n"
         await m_copywrite.finish(ret)
 
     args = args.split(maxsplit=1)
