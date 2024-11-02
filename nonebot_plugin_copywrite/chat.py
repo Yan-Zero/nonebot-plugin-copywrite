@@ -13,7 +13,7 @@ try:
                 "api_key": i.get("key"),
                 "base_url": i.get("url"),
             }
-except Exception as ex:
+except Exception:
     pass
 
 
