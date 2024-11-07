@@ -1,5 +1,6 @@
 import re
 import sys
+import functools
 import itertools
 import asyncio
 import pathlib
@@ -22,11 +23,13 @@ from nonebot.log import logger
 
 from .copywrite import generate_copywrite
 from .copywrite import Pattern
+from .utils import to_await
 from .chat import chat
 
 # from datetime import datetime
 # from nonebot.adapters.onebot.v11 import GroupMessageEvent
 # from .config import copywrite_config
+
 
 m_copywrite = on_command(
     "copywrite",
@@ -62,7 +65,7 @@ _COPY: dict[str, Pattern] = {}
 _COPY_TYPE: dict[str, set] = {}
 
 
-async def load(clear: bool = False, **kwargs):
+def load(clear: bool = False, **kwargs):
     global _COPY, _COPY_TYPE
     if clear:
         _COPY = {}
@@ -89,18 +92,18 @@ async def load(clear: bool = False, **kwargs):
                     _COPY_TYPE[category].add(key)
                     _COPY[key] = Pattern.model_validate(v)
 
+    return "重新加载完成。"
+
 
 async def fetch(diff: bool = False, **kwargs):
     pip_path = next(pathlib.Path(sys.executable).parent.glob("pip*"))
     if not pip_path:
         return "没有找到 pip 路径哦"
     ret = await asyncio.create_subprocess_exec(
-        str(pip_path.absolute()),
-        [
-            "install",
-            "--upgrade",
-            "git+https://github.com/Yan-Zero/nonebot-plugin-copywrite.git",
-        ],
+        pip_path.absolute(),
+        "install",
+        "--upgrade",
+        "nonebot-plugin-copywrite",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
@@ -121,7 +124,8 @@ async def fetch(diff: bool = False, **kwargs):
     await load(clear=True)
 
     ret = ret[ret.find("Successfully installed nonebot-plugin-copywrite-") + 48 :]
-    ret = f"已经更新 {ret[: ret.find("\n")]}。\n"
+    ret = ret[: ret.find("\n")]
+    ret = f"已经更新 {ret}。\n"
     if diff:
         if not _c:
             _c = {}
@@ -163,15 +167,15 @@ async def fetch(diff: bool = False, **kwargs):
     return ret.strip()
 
 
-RESERVED_WORD["reload"] = load
-RESERVED_WORD["fetch"] = lambda **kwargs: fetch(diff=True, **kwargs)
+RESERVED_WORD["reload"] = to_await(load)
+RESERVED_WORD["fetch"] = functools.partial(fetch, diff=True)
+load()
 
 
 @m_copywrite.handle()
 async def _(bot: Bot, event: MessageEvent, args=CommandArg()):
     args = args.extract_plain_text().strip()
     if not args:
-        ret = "请输入要仿写的文案名字"
         if True:
             ret = ""
             for category, keys in _COPY_TYPE.items():
@@ -180,6 +184,8 @@ async def _(bot: Bot, event: MessageEvent, args=CommandArg()):
                     + ", ".join(sorted(keys, key=lambda x: (-len(x), x)))
                     + "\n"
                 )
+        if not ret:
+            ret = "好像一片空白？"
         await m_copywrite.finish(ret)
 
     args = args.split(maxsplit=1)
@@ -211,7 +217,7 @@ async def _(bot: Bot, event: MessageEvent, args=CommandArg()):
 
     try:
         rsp = await chat(
-            message=[
+            messages=[
                 {
                     "role": "user",
                     "content": generate_copywrite(
@@ -240,7 +246,7 @@ async def _(args=CommandArg()):
 
     try:
         rsp = await chat(
-            message=[
+            messages=[
                 {
                     "role": "user",
                     "content": r""";; 模型: Claude Sonnet
