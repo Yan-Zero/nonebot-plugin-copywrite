@@ -1,10 +1,10 @@
 import yaml
+
 from openai import AsyncOpenAI
-from nonebot import get_plugin_config
 
-from .config import Config
+# from nonebot import get_plugin_config
+# from .config import Config
 
-config: Config = get_plugin_config(Config)
 OPENAI_CONFIG = {}
 try:
     with open("configs/chatgpt-vision/keys.yaml") as f:
