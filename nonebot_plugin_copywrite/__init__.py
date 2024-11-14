@@ -23,7 +23,6 @@ from nonebot.log import logger
 
 from .copywrite import generate_copywrite
 from .copywrite import Pattern
-from .utils import to_await
 from .chat import chat
 
 # from datetime import datetime
@@ -72,25 +71,29 @@ def load(clear: bool = False, **kwargs):
         _COPY_TYPE = {}
 
     for file in itertools.chain(
-        pathlib.Path("./data/copywrite").glob("**/*.yaml"),
         pathlib.Path(__file__).parent.glob("copywrite/*.yaml"),
+        pathlib.Path("./data/copywrite").glob("**/*.yaml"),
     ):
         with open(file, "r", encoding="utf-8") as f:
             _data = yaml.safe_load(f)
-            if isinstance(_data, dict):
-                if "__category__" in _data:
-                    category = _data["__category__"]
-                    del _data["__category__"]
-                else:
-                    category = "Default"
-                if category not in _COPY_TYPE:
-                    _COPY_TYPE[category] = set()
-                for key, v in _data.items():
-                    if key in RESERVED_WORD:
-                        logger.opt(colors=True).warning(f"{key} is reserved word.")
-                        continue
-                    _COPY_TYPE[category].add(key)
-                    _COPY[key] = Pattern.model_validate(v)
+            if not isinstance(_data, dict):
+                continue
+
+            if "__category__" in _data:
+                category = _data["__category__"]
+                del _data["__category__"]
+            else:
+                category = "Default"
+
+            if category not in _COPY_TYPE:
+                _COPY_TYPE[category] = set()
+
+            for key, v in _data.items():
+                if key in RESERVED_WORD:
+                    logger.opt(colors=True).warning(f"{key} is reserved word.")
+                    continue
+                _COPY_TYPE[category].add(key)
+                _COPY[key] = Pattern.model_validate(v)
 
     return "重新加载完成。"
 
@@ -103,7 +106,7 @@ async def fetch(diff: bool = False, **kwargs):
         pip_path.absolute(),
         "install",
         "--upgrade",
-        "nonebot-plugin-copywrite",
+        "git+https://github.com/Yan-Zero/nonebot-plugin-copywrite.git",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
@@ -167,7 +170,7 @@ async def fetch(diff: bool = False, **kwargs):
     return ret.strip()
 
 
-RESERVED_WORD["reload"] = to_await(load)
+RESERVED_WORD["reload"] = asyncio.to_thread(load)
 RESERVED_WORD["fetch"] = functools.partial(fetch, diff=True)
 load()
 

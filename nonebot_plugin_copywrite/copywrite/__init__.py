@@ -13,13 +13,13 @@ class Pattern(BaseModel):
     def __sub__(self: Self, other: Self) -> str:
         ret = []
         if self.addition != other.addition:
-            ret.append("Addition Update")
+            ret.append("Addition")
         if self.examples - other.examples or other.examples - self.examples:
-            ret.append("Examples Update")
+            ret.append("Examples")
         if self.keywords != other.keywords:
-            ret.append("Keywords Update")
+            ret.append("Keywords")
         if self.help != other.help:
-            ret.append("Help Update")
+            ret.append("Help")
         return ", ".join(ret)
 
 

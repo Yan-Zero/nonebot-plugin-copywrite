@@ -25,9 +25,9 @@ _✨ NoneBot 定型文生成器 ✨_
 <a href="https://onebot.adapters.nonebot.dev">
     <img src="https://img.shields.io/badge/OneBot-11-black?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABwCAMAAADxPgR5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAxQTFRF////29vbr6+vAAAAk1hCcwAAAAR0Uk5T////AEAqqfQAAAKcSURBVHja7NrbctswDATQXfD//zlpO7FlmwAWIOnOtNaTM5JwDMa8E+PNFz7g3waJ24fviyDPgfhz8fHP39cBcBL9KoJbQUxjA2iYqHL3FAnvzhL4GtVNUcoSZe6eSHizBcK5LL7dBr2AUZlev1ARRHCljzRALIEog6H3U6bCIyqIZdAT0eBuJYaGiJaHSjmkYIZd+qSGWAQnIaz2OArVnX6vrItQvbhZJtVGB5qX9wKqCMkb9W7aexfCO/rwQRBzsDIsYx4AOz0nhAtWu7bqkEQBO0Pr+Ftjt5fFCUEbm0Sbgdu8WSgJ5NgH2iu46R/o1UcBXJsFusWF/QUaz3RwJMEgngfaGGdSxJkE/Yg4lOBryBiMwvAhZrVMUUvwqU7F05b5WLaUIN4M4hRocQQRnEedgsn7TZB3UCpRrIJwQfqvGwsg18EnI2uSVNC8t+0QmMXogvbPg/xk+Mnw/6kW/rraUlvqgmFreAA09xW5t0AFlHrQZ3CsgvZm0FbHNKyBmheBKIF2cCA8A600aHPmFtRB1XvMsJAiza7LpPog0UJwccKdzw8rdf8MyN2ePYF896LC5hTzdZqxb6VNXInaupARLDNBWgI8spq4T0Qb5H4vWfPmHo8OyB1ito+AysNNz0oglj1U955sjUN9d41LnrX2D/u7eRwxyOaOpfyevCWbTgDEoilsOnu7zsKhjRCsnD/QzhdkYLBLXjiK4f3UWmcx2M7PO21CKVTH84638NTplt6JIQH0ZwCNuiWAfvuLhdrcOYPVO9eW3A67l7hZtgaY9GZo9AFc6cryjoeFBIWeU+npnk/nLE0OxCHL1eQsc1IciehjpJv5mqCsjeopaH6r15/MrxNnVhu7tmcslay2gO2Z1QfcfX0JMACG41/u0RrI9QAAAABJRU5ErkJggg==" alt="onebot">
 </a>
-<!-- <a href="https://pypi.python.org/pypi/nonebot-plugin-copywrite" rel="nofollow">
+<a href="https://pypi.python.org/pypi/nonebot-plugin-copywrite" rel="nofollow">
     <img alt="pypi download" src="https://img.shields.io/pypi/dm/nonebot-plugin-copywrite" style="max-width: 100%;">
-</a> -->
+</a>
 
 </div>
 
@@ -57,7 +57,7 @@ __category__: 114514
 
 #### 解释
 
-- __category__: 定型文的分类
+- \_\_category\_\_: 定型文的分类
 - examples: 例子
 - addition: 附加内容，用以约束 LLM 可能的输出
 - model: 使用的模型
@@ -66,19 +66,57 @@ __category__: 114514
 
 ### 文案
 
-> /文案 [Key] (Keywords)* [Topic]
-> /文案 求真学生 吃饭
+> /文案 [Type] (Keywords)* [Topic]
 
-查看可用文案：
+生产电子垃圾。
+
+| 参数 | 说明 |
+| ---- | ---- |
+| Type | 文案名字 |
+| Topic | 文案的主题 |
+| Keywords | 文案的关键词 |
+
 > /文案
 
-查看帮助（如果有）：
-> /文案 [Key]
+查看可用文案.
+
+> /文案 [Type]
+
+查看帮助，如果有的话。
 
 #### 保留关键字
 
+只有 SuperAdmin 才能使用。
+
 1. reload: 重新加载定型文数据
-2. fetch: ！！慎用！！ 调用 pip 更新 nonebot-plugin-copywrite，由于依赖问题，可能下一次bot就无法启动了。
+2. **fetch**: ！！慎用！！ 调用 pip 更新 nonebot-plugin-copywrite，由于依赖问题，可能下一次bot就无法启动了。
+
+#### 文案 示例
+
+> /文案
+
+```yaml
+Yan:
+  不是高三生, 乙游大世界, 两种可能, 你说得对, 女性凝视, 二次元, 四不吃, 回来吧, 带节奏, 慢就业, 紧缩术, 恩情, 意林, 饭局, 鸣潮
+Life.Checkpoint:
+  第一个被抓, 求真学生, 表白
+```
+
+---
+
+> /copywrite reload
+
+```yaml
+重新加载完成。
+```
+
+---
+
+> /文案 鸣潮 造新梗，套公式
+
+```yaml
+造新梗是这样的，网友们只需要动动手指发个帖就行了，而梗创作者要考虑的事情就很多了，什么时候抓住热点，怎么巧妙结合时事，如何让梗迅速传播，都需要深思熟虑。
+```
 
 #### 文案 Alias
 
@@ -86,10 +124,21 @@ __category__: 114514
 
 ### 汉语新解
 
-> /汉语新解 [Word]
-> /汉语新解 求真书院
+Prompt 原作者：[李继刚](https://web.okjike.com/u/752D3103-1107-43A0-BA49-20EC29D09E36)
 
-著名的某图片生成prompt
+> /汉语新解 [Word]
+
+将一个汉语词汇进行全新角度的解释。（看模型，GPT-4o 多正能量，Claude 多讽刺，Gemini 比较中庸）
+
+| 参数 | 说明 |
+| ---- | ---- |
+| Word | 词汇，其实不仅限于汉语。 |
+
+#### 汉语新解 示例
+
+> /汉语新解 调休
+
+![调休](https://linux.do/uploads/default/optimized/3X/8/e/8ef55c54541fe2e152db70151d129054d20e6c6a_2_666x750.png)
 
 #### 汉语新解 Alias
 
