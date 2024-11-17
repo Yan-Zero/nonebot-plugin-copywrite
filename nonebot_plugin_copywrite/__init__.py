@@ -124,7 +124,7 @@ async def fetch(diff: bool = False, **kwargs):
         _ct = {k: v.copy() for k, v in _COPY_TYPE.items()}
         _c = _COPY
 
-    await load(clear=True)
+    load(clear=True)
 
     ret = ret[ret.find("Successfully installed nonebot-plugin-copywrite-") + 48 :]
     ret = ret[: ret.find("\n")]
@@ -170,7 +170,7 @@ async def fetch(diff: bool = False, **kwargs):
     return ret.strip()
 
 
-RESERVED_WORD["reload"] = asyncio.to_thread(load)
+RESERVED_WORD["reload"] = functools.partial(asyncio.to_thread, load, diff=True)
 RESERVED_WORD["fetch"] = functools.partial(fetch, diff=True)
 load()
 
