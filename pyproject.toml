@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nonebot-plugin-copywrite"
-version = "0.2.4"
+version = "0.2.5"
 description = ""
 authors = ["Yan <1964649083@qq.com>"]
 license = "Apache License 2.0"
