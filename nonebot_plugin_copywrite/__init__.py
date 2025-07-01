@@ -89,6 +89,7 @@ def load(clear: bool = False, **kwargs):
                 _COPY_TYPE[category] = set()
 
             for key, v in _data.items():
+                key = key.strip().lower()
                 if key in RESERVED_WORD:
                     logger.opt(colors=True).warning(f"{key} is reserved word.")
                     continue
@@ -396,8 +397,7 @@ design-principles '(干净 简洁 典雅))
                 },
                 {"role": "user", "content": f"(汉语新解 {args})"},
             ],
-            # model="claude-3-sonnet-20240229",
-            model=random.choice(["gemini-1.5-pro-exp-0827", "gpt-4o"]),
+            model=random.choice(["gemini-2.5-pro", "gemini-2.5-flash"]),
             temperature=0.7,
         )
         rsp = svg_pattern.findall(rsp.choices[0].message.content)
