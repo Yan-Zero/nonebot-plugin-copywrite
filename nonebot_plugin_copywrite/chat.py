@@ -17,7 +17,7 @@ except Exception:
     pass
 
 
-async def chat(messages: list, model: str, times: int = 3, temperature: int = 0.65):
+async def chat(messages: list, model: str, times: int = 3, temperature: float = 0.65):
     """
     Chat with ChatGPT
 
@@ -43,11 +43,3 @@ async def chat(messages: list, model: str, times: int = 3, temperature: int = 0.
         return rsp
     except ValueError:
         pass
-
-
-async def draw_image(model: str, prompt: str, size: str = "1024x1024", times: int = 3):
-    if model not in OPENAI_ASYNC_CLIENT:
-        raise ValueError(f"The model {model} is not supported.")
-    return await OPENAI_ASYNC_CLIENT[model].images.generate(
-        model=model, prompt=prompt, size=size
-    )
