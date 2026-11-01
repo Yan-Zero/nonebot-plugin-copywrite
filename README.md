@@ -17,7 +17,7 @@ _✨ NoneBot 定型文生成器 ✨_
     <img src="https://img.shields.io/pypi/v/nonebot-plugin-copywrite.svg" alt="pypi">
 </a>
 <a href="https://www.python.org">
-    <img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="python">
+    <img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="python">
 </a>
 <a href="https://nonebot.dev">
     <img src="https://img.shields.io/badge/nonebot-2.4.0+-red.svg" alt="nonebot">
