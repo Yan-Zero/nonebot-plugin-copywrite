@@ -22,7 +22,9 @@ from nonebot.adapters.onebot.v11 import MessageEvent
 from nonebot.adapters.onebot.v11.message import MessageSegment as V11Seg
 
 from .chat import chat
+from .models import Model
 from .copywrite import Pattern
+from .copywrite import DEFAULT_MODEL
 from .copywrite import generate_copywrite
 
 m_copywrite = on_command(
@@ -50,6 +52,16 @@ _COPY: dict[str, Pattern] = {}
 _COPY_TYPE: dict[str, set] = {}
 
 
+def _parse_model(value: object, fallback: Model, where: object) -> Model:
+    if value is None:
+        return fallback
+    try:
+        return Model(value)
+    except ValueError:
+        logger.opt(colors=True).warning(f"{where} 的 model 无效，使用 {fallback}。")
+        return fallback
+
+
 def load(clear: bool = False, **kwargs):
     global _COPY, _COPY_TYPE
     if clear:
@@ -74,13 +86,26 @@ def load(clear: bool = False, **kwargs):
             if category not in _COPY_TYPE:
                 _COPY_TYPE[category] = set()
 
+            default_model = _parse_model(
+                _data.pop("__model__", None), DEFAULT_MODEL, file
+            )
+
             for key, v in _data.items():
                 key = key.strip().lower()
                 if key in RESERVED_WORD:
                     logger.opt(colors=True).warning(f"{key} is reserved word.")
                     continue
+                if not isinstance(v, dict):
+                    logger.opt(colors=True).warning(f"{key} 的配置无效。")
+                    continue
+                v["model"] = _parse_model(v.get("model"), default_model, key)
+                try:
+                    pattern = Pattern.model_validate(v)
+                except Exception as ex:
+                    logger.opt(colors=True).warning(f"{key} 的配置无效: {ex}")
+                    continue
                 _COPY_TYPE[category].add(key)
-                _COPY[key] = Pattern.model_validate(v)
+                _COPY[key] = pattern
 
     return "重新加载完成。"
 
@@ -217,7 +242,7 @@ async def _(bot: Bot, event: MessageEvent, args=CommandArg()):
                     ),
                 }
             ],
-            model=copy.model,
+            model=copy.resolve_model(),
         )
         if not rsp:
             raise ValueError("The Response is Null.")

@@ -45,6 +45,7 @@ _✨ NoneBot 定型文生成器 ✨_
 
 ```yaml
 __category__: 114514
+__model__: sol
 
 鸣潮:
   examples:
@@ -52,15 +53,42 @@ __category__: 114514
     - 儿童节是这样的，大哥哥只需要在家等着被抓就行了，而小萝莉要考虑的事情就很多了，什么时候喊杂鱼杂鱼，什么时候掀裙子露内裤，什么时候拉响警报器，都需要经过深思熟虑
     - 企业家是这样的，员工只需要完成工作任务就行了，而老板要考虑的事情就很多了，什么时候拖欠工资，什么时候增加工作时间，员工绩效怎么压，都需要深思熟虑
   addition: "你回复的文案应该是辛辣讽刺的，例如老板考虑如何拖欠工资，学生考虑低分怎么辩解，游戏玩家考虑如何开挂。"
-  model: grok-beta
+
+紧缩术:
+  examples:
+    - 你的太阳系舰队比较松弛……
+  model: luna
 ```
 
 #### 解释
 
 - \_\_category\_\_: 定型文的分类
+- \_\_model\_\_: 本文件所有文案默认使用的模型代号
 - examples: 例子
 - addition: 附加内容，用以约束 LLM 可能的输出
-- model: 使用的模型
+- model: 模型代号，覆盖 \_\_model\_\_
+
+#### 模型代号
+
+模型代号只表示「档位」，具体调用哪个模型由配置决定。每档两个代号可以混用：
+
+| 代号 | 同档代号 | 档位 | 配置项 |
+| ---- | -------- | ---- | ------ |
+| luna | haiku | 小杯 | `COPYWRITE_MODEL_LUNA` |
+| terra | sonnet | 中杯 | `COPYWRITE_MODEL_TERRA` |
+| sol | opus | 大杯 | `COPYWRITE_MODEL_SOL` |
+| astra | fable | 超大杯 | `COPYWRITE_MODEL_ASTRA` |
+
+在 `.env` 里按档位填模型名即可，例如：
+
+```dotenv
+COPYWRITE_MODEL_LUNA=gemini-2.5-flash-lite
+COPYWRITE_MODEL_TERRA=gemini-2.5-flash
+COPYWRITE_MODEL_SOL=gemini-3-flash-preview
+COPYWRITE_MODEL_ASTRA=gemini-3-pro-preview
+```
+
+没写 `model` 的文案使用 `__model__`，没写 `__model__` 的文件默认 `luna`。配置项未填写时四档均为 `gpt-6-luna`；模型名必须在 `configs/chatgpt-vision/keys.yaml` 里配置过才能调用。
 
 ## 💬 指令
 

@@ -2,10 +2,15 @@ from typing import Self
 from pydantic import BaseModel
 from pydantic import Field
 
+from ..models import Model
+from ..models import resolve_model
+
+DEFAULT_MODEL = Model.LUNA
+
 
 class Pattern(BaseModel):
     examples: set[str]
-    model: str = Field(default="gpt-4o-mini")
+    model: Model = Field(default=DEFAULT_MODEL)
     addition: str = Field(default="")
     keywords: int = Field(default=1)
     help: str | None = Field(default=None)
@@ -20,7 +25,13 @@ class Pattern(BaseModel):
             ret.append("Keywords")
         if self.help != other.help:
             ret.append("Help")
+        if self.model != other.model:
+            ret.append("Model")
         return ", ".join(ret)
+
+    def resolve_model(self) -> str:
+        """该条文案实际调用的模型名。"""
+        return resolve_model(self.model)
 
 
 def generate_copywrite(copy: Pattern, topic: str, keywords: list[str] = []) -> str:

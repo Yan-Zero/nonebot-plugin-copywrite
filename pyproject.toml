@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-copywrite"
-version = "0.3.0"
+version = "0.3.1"
 description = ""
 authors = [{ name = "Yan", email = "1964649083@qq.com" }]
 requires-python = ">=3.11,<4.0"
