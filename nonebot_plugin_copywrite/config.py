@@ -10,5 +10,8 @@ class Config(BaseModel):
     copywrite_model_sol: str = "gpt-6-luna"
     copywrite_model_astra: str = "gpt-6-luna"
 
+    copywrite_fetch_url: str = "https://codeload.github.com/Yan-Zero/nonebot-plugin-copywrite/tar.gz/refs/heads/main"
+    """`/文案 fetch` 下载的 tar.gz 归档，可换成镜像。"""
+
 
 copywrite_config = get_plugin_config(Config)

@@ -64,6 +64,7 @@ __model__: sol
 
 - \_\_category\_\_: 定型文的分类
 - \_\_model\_\_: 本文件所有文案默认使用的模型代号
+- \_\_min_version\_\_: 可选，需要的最低插件版本，版本不够时整个文件跳过
 - examples: 例子
 - addition: 附加内容，用以约束 LLM 可能的输出
 - model: 模型代号，覆盖 \_\_model\_\_
@@ -116,8 +117,10 @@ COPYWRITE_MODEL_ASTRA=gemini-3-pro-preview
 
 只有 SuperAdmin 才能使用。
 
-1. reload: 重新加载定型文数据
-2. **fetch**: ！！慎用！！ 调用 pip 更新 nonebot-plugin-copywrite，由于依赖问题，可能下一次bot就无法启动了。
+1. reload: 重新加载定型文数据，并列出新增、移除和变化的文案
+2. fetch: 从 GitHub 下载最新的内置文案并重新加载。只更新 yaml，不改 Python 环境
+
+fetch 下载的文案缓存在 `./data/copywrite_builtin/`，优先于包内自带的文案。插件升级后缓存自动作废，改用新包自带的文案，需要时再 fetch 一次。下载地址可以用 `COPYWRITE_FETCH_URL` 换成镜像，格式与 GitHub 的 tar.gz 归档相同。
 
 #### 文案 示例
 
@@ -150,24 +153,3 @@ Life.Checkpoint:
 
 - copywrite
 
-### 汉语新解
-
-Prompt 原作者：[李继刚](https://web.okjike.com/u/752D3103-1107-43A0-BA49-20EC29D09E36)
-
-> /汉语新解 [Word]
-
-将一个汉语词汇进行全新角度的解释。（看模型，GPT-4o 多正能量，Claude 多讽刺，Gemini 比较中庸）
-
-| 参数 | 说明 |
-| ---- | ---- |
-| Word | 词汇，其实不仅限于汉语。 |
-
-#### 汉语新解 示例
-
-> /汉语新解 调休
-
-![调休](https://linux.do/uploads/default/optimized/3X/8/e/8ef55c54541fe2e152db70151d129054d20e6c6a_2_666x750.png)
-
-#### 汉语新解 Alias
-
-- new-meaning
