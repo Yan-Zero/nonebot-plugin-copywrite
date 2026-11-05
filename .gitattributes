@@ -1,0 +1,4 @@
+# YAML 在 GitHub Linguist 里属于 data 类型，默认不参与语言统计。
+# 文案模板是本项目的重要组成，这里显式让它们计入语言统计。
+*.yaml linguist-detectable linguist-language=YAML
+*.yml  linguist-detectable linguist-language=YAML
