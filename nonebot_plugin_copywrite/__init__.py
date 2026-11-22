@@ -4,8 +4,7 @@ from typing import Awaitable, Callable
 
 import yaml
 from nonebot import on_command
-from nonebot.adapters import Bot, Message, MessageSegment, MessageTemplate
-from nonebot.adapters.onebot.v11 import MessageEvent
+from nonebot.adapters import Bot, Event, Message, MessageSegment, MessageTemplate
 from nonebot.log import logger
 from nonebot.params import CommandArg
 from nonebot.permission import SUPERUSER
@@ -150,7 +149,7 @@ load()
 
 
 @m_copywrite.handle()
-async def _(bot: Bot, event: MessageEvent, args=CommandArg()):
+async def _(bot: Bot, event: Event, args=CommandArg()):
     args = args.extract_plain_text().strip()
     if not args:
         if True:
